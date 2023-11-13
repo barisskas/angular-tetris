@@ -1,0 +1,9 @@
+<div class="tetris-board">
+  <div *ngFor="let row of gameBoard; let y = index" class="board-row">
+    <div
+      *ngFor="let cell of row; let x = index"
+      class="board-cell"
+      [ngClass]="{ filled: cell }"
+    ></div>
+  </div>
+</div>
