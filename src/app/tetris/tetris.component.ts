@@ -245,12 +245,23 @@ export class TetrisComponent implements OnInit {
   }
 
   rotateTetromino() {
-    const newRotation = this.currentTetromino.shape.map((point: number[]) => {
+    let newRotation = this.currentTetromino.shape.map((point: number[]) => {
       const [x, y] = point;
       const newX = 1 - (y - 1);
       const newY = x - 1 + 1;
       return [newX, newY];
     });
+    if (this.currentTetromino instanceof TetrominoO) {
+      return;
+    }
+    if (this.currentTetromino instanceof TetrominoI) {
+      newRotation = this.currentTetromino.shape.map((point: number[]) => {
+        const [x, y] = point;
+        const newX = 2 - (y - 1);
+        const newY = x - 1 + 1;
+        return [newX, newY];
+      });
+    }
 
     const collision = newRotation.some(([x, y]: number[]) => {
       return (
