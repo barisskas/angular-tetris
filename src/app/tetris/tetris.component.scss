@@ -3,7 +3,6 @@
   grid-template-rows: repeat(20, 1fr);
   grid-template-columns: repeat(10, 1fr);
   gap: 1px;
-  background-color: #000;
 }
 
 .board-row {
@@ -19,4 +18,50 @@
 
 .filled {
   background-color: blue;
+}
+
+.tetromino-t {
+  background-color: aqua;
+  background: url("../../assets/x.png");
+  background-size: 100% 100%;
+}
+
+.tetromino-i {
+  background-color: blueviolet;
+  background: url("../../assets/x.png");
+  background-size: 100% 100%;
+}
+
+.tetromino-o {
+  background-color: chartreuse;
+  background: url("../../assets/y.png");
+  background-size: 100% 100%;
+}
+
+.tetromino-s {
+  background-color: coral;
+  background: url("../../assets/x.png");
+  background-size: 100% 100%;
+}
+
+.tetromino-z {
+  background-color: darkorange;
+  background: url("../../assets/y.png");
+  background-size: 100% 100%;
+}
+
+.tetromino-j {
+  background-color: darkorchid;
+  background: url("../../assets/y.png");
+  background-size: 100% 100%;
+}
+
+.tetromino-l {
+  background-color: darkturquoise;
+  background: url("../../assets/y.png");
+  background-size: 100% 100%;
+}
+
+* {
+  box-sizing: border-box;
 }

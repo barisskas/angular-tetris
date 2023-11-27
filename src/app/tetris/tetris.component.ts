@@ -1,5 +1,109 @@
 import { Component, OnInit } from '@angular/core';
 
+class Tetromino {
+  shape: number[][];
+  color: string;
+
+  constructor(shape: number[][], color: string) {
+    this.shape = shape;
+    this.color = color;
+  }
+}
+
+class TetrominoT extends Tetromino {
+  constructor() {
+    super(
+      [
+        [1, 0],
+        [0, 1],
+        [1, 1],
+        [2, 1],
+      ],
+      'blue'
+    );
+  }
+}
+
+class TetrominoI extends Tetromino {
+  constructor() {
+    super(
+      [
+        [0, 1],
+        [1, 1],
+        [2, 1],
+        [3, 1],
+      ],
+      'red'
+    );
+  }
+}
+
+class TetrominoJ extends Tetromino {
+  constructor() {
+    super(
+      [
+        [0, 0],
+        [0, 1],
+        [1, 1],
+        [2, 1],
+      ],
+      'yellow'
+    );
+  }
+}
+class TetrominoL extends Tetromino {
+  constructor() {
+    super(
+      [
+        [0, 1],
+        [1, 1],
+        [2, 1],
+        [2, 0],
+      ],
+      'green'
+    );
+  }
+}
+class TetrominoO extends Tetromino {
+  constructor() {
+    super(
+      [
+        [0, 0],
+        [0, 1],
+        [1, 0],
+        [1, 1],
+      ],
+      'purple'
+    );
+  }
+}
+class TetrominoS extends Tetromino {
+  constructor() {
+    super(
+      [
+        [0, 1],
+        [1, 1],
+        [1, 0],
+        [2, 0],
+      ],
+      'orange'
+    );
+  }
+}
+class TetrominoZ extends Tetromino {
+  constructor() {
+    super(
+      [
+        [0, 0],
+        [1, 0],
+        [1, 1],
+        [2, 1],
+      ],
+      'black'
+    );
+  }
+}
+
 @Component({
   selector: 'app-tetris',
   templateUrl: './tetris.component.html',
@@ -9,9 +113,9 @@ import { Component, OnInit } from '@angular/core';
   },
 })
 export class TetrisComponent implements OnInit {
-  gameBoard: boolean[][] = Array(20)
+  gameBoard: (Tetromino | null)[][] = Array(20)
     .fill(null)
-    .map(() => Array(10).fill(false));
+    .map(() => Array(10).fill(null));
 
   tetrominos: any;
   currentTetromino: any;
@@ -33,53 +137,18 @@ export class TetrisComponent implements OnInit {
   initBoard() {
     this.gameBoard = Array(20)
       .fill(null)
-      .map(() => Array(10).fill(false));
+      .map(() => Array(10).fill(null));
   }
 
   initTetrominos() {
     this.tetrominos = {
-      T: [
-        [1, 0],
-        [0, 1],
-        [1, 1],
-        [2, 1],
-      ],
-      I: [
-        [0, 1],
-        [1, 1],
-        [2, 1],
-        [3, 1],
-      ],
-      J: [
-        [0, 0],
-        [0, 1],
-        [1, 1],
-        [2, 1],
-      ],
-      L: [
-        [0, 1],
-        [1, 1],
-        [2, 1],
-        [2, 0],
-      ],
-      O: [
-        [0, 0],
-        [0, 1],
-        [1, 0],
-        [1, 1],
-      ],
-      S: [
-        [0, 1],
-        [1, 0],
-        [1, 1],
-        [2, 0],
-      ],
-      Z: [
-        [0, 0],
-        [1, 0],
-        [1, 1],
-        [2, 1],
-      ],
+      T: new TetrominoT(),
+      I: new TetrominoI(),
+      J: new TetrominoJ(),
+      L: new TetrominoL(),
+      O: new TetrominoO(),
+      S: new TetrominoS(),
+      Z: new TetrominoZ(),
     };
   }
 
@@ -101,37 +170,45 @@ export class TetrisComponent implements OnInit {
     );
   }
 
-  placeTetromino(x: number, y: number, tetromino: any, value: boolean) {
-    tetromino.forEach((point: number[]) => {
+  placeTetromino(x: number, y: number, tetromino: Tetromino, value: boolean) {
+    tetromino.shape.forEach((point: number[]) => {
       const [row, col] = point;
-      this.gameBoard[y + col][x + row] = value;
+      this.gameBoard[y + col][x + row] = value ? tetromino : null;
     });
   }
 
   moveTetromino(direction: number) {
+    // Tetrominoyu kaldır
     this.placeTetromino(
       this.currentX,
       this.currentY,
       this.currentTetromino,
       false
     );
+
+    // Yeni X pozisyonunu hesapla
     const newX = this.currentX + direction;
-    if (!this.checkCollision(newX, this.currentY, this.currentTetromino)) {
+
+    // Hem X hem de Y koordinatları için çarpışma kontrolü yap
+    if (
+      !this.checkCollision(newX, this.currentY, this.currentTetromino) &&
+      !this.checkCollision(
+        this.currentX,
+        this.currentY + 1,
+        this.currentTetromino
+      )
+    ) {
+      // Eğer çarpışma yoksa, X pozisyonunu güncelle
       this.currentX = newX;
-      this.placeTetromino(
-        this.currentX,
-        this.currentY,
-        this.currentTetromino,
-        true
-      );
-    } else {
-      this.placeTetromino(
-        this.currentX,
-        this.currentY,
-        this.currentTetromino,
-        true
-      );
     }
+
+    // Tetrominoyu yeni pozisyona yerleştir
+    this.placeTetromino(
+      this.currentX,
+      this.currentY,
+      this.currentTetromino,
+      true
+    );
   }
 
   moveTetrominoDown() {
@@ -141,7 +218,9 @@ export class TetrisComponent implements OnInit {
       this.currentTetromino,
       false
     );
+
     const newY = this.currentY + 1;
+
     if (!this.checkCollision(this.currentX, newY, this.currentTetromino)) {
       this.currentY = newY;
       this.placeTetromino(
@@ -157,44 +236,43 @@ export class TetrisComponent implements OnInit {
         this.currentTetromino,
         true
       );
+
       const completedLines = this.checkCompleteLines();
-      if (completedLines.length > 0) {
-        this.clearCompleteLines(completedLines);
-      }
+      this.clearCompleteLines(completedLines);
+
       this.generateTetromino();
     }
   }
+
   rotateTetromino() {
-    // Yeni rotasyonu hesaplayın
-    const newRotation = this.currentTetromino.map((point: number[]) => {
+    const newRotation = this.currentTetromino.shape.map((point: number[]) => {
       const [x, y] = point;
-      // Merkez etrafında döndürün: Örneğin, merkezi (1,1) olarak kabul edelim
       const newX = 1 - (y - 1);
       const newY = x - 1 + 1;
       return [newX, newY];
     });
 
-    const collision = newRotation.some((point: number[]) => {
-      const [x, y] = point;
+    const collision = newRotation.some(([x, y]: number[]) => {
       return (
         x < 0 ||
         x >= this.gameBoard[0].length ||
+        y < 0 ||
         y >= this.gameBoard.length ||
-        this.gameBoard[y][x]
+        (this.gameBoard[y + this.currentY] &&
+          this.gameBoard[y + this.currentY][x + this.currentX] !== null &&
+          this.gameBoard[y + this.currentY][x + this.currentX] !==
+            this.currentTetromino)
       );
     });
 
-    // Eğer rotasyon geçerliyse, Tetromino'nun pozisyonunu güncelleyin
     if (!collision) {
-      // Önceki pozisyonu temizleyin
       this.placeTetromino(
         this.currentX,
         this.currentY,
         this.currentTetromino,
         false
       );
-      // Yeni rotasyonu uygulayın
-      this.currentTetromino = newRotation;
+      this.currentTetromino.shape = newRotation;
       this.placeTetromino(
         this.currentX,
         this.currentY,
@@ -216,49 +294,51 @@ export class TetrisComponent implements OnInit {
     }
   }
 
-  checkCollision(x: number, y: number, tetromino: any): boolean {
-    for (let point of tetromino) {
+  checkCollision(x: number, y: number, tetromino: Tetromino): boolean {
+    for (let point of tetromino.shape) {
       const newX = x + point[0];
       const newY = y + point[1];
       if (
         newX < 0 ||
         newX >= this.gameBoard[0].length ||
-        newY >= this.gameBoard.length
+        newY >= this.gameBoard.length ||
+        this.gameBoard[newY][newX] !== null
       ) {
-        return true;
-      }
-      if (this.gameBoard[newY][newX]) {
         return true;
       }
     }
     return false;
   }
-
-  checkCompleteLines() {
-    const completedLines = [];
-
-    for (let y = 0; y < this.gameBoard.length; y++) {
-      let isComplete = true;
-
-      for (let x = 0; x < this.gameBoard[y].length; x++) {
-        if (!this.gameBoard[y][x]) {
-          isComplete = false;
-          break;
-        }
-      }
-
-      if (isComplete) {
-        completedLines.push(y);
-      }
-    }
-
-    return completedLines;
+  checkCompleteLines(): number[] {
+    return this.gameBoard
+      .map((row, index) => (row.every((cell) => cell !== null) ? index : -1))
+      .filter((index) => index !== -1);
   }
 
   clearCompleteLines(completedLines: number[]) {
     completedLines.forEach((line) => {
       this.gameBoard.splice(line, 1);
-      this.gameBoard.unshift(Array(10).fill(false));
+      this.gameBoard.unshift(Array(10).fill(null));
     });
+  }
+
+  getCellClass(cell: Tetromino | null): string {
+    if (cell instanceof TetrominoT) {
+      return 'tetromino-t';
+    } else if (cell instanceof TetrominoI) {
+      return 'tetromino-i';
+    } else if (cell instanceof TetrominoJ) {
+      return 'tetromino-j';
+    } else if (cell instanceof TetrominoL) {
+      return 'tetromino-l';
+    } else if (cell instanceof TetrominoO) {
+      return 'tetromino-o';
+    } else if (cell instanceof TetrominoS) {
+      return 'tetromino-s';
+    } else if (cell instanceof TetrominoZ) {
+      return 'tetromino-z';
+    } else {
+      return '';
+    }
   }
 }

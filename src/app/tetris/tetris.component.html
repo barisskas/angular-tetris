@@ -3,7 +3,7 @@
     <div
       *ngFor="let cell of row; let x = index"
       class="board-cell"
-      [ngClass]="{ filled: cell }"
+      [ngClass]="getCellClass(cell)"
     ></div>
   </div>
 </div>
