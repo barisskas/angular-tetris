@@ -1,9 +1,13 @@
 <div class="tetris-board">
   <div *ngFor="let row of gameBoard; let y = index" class="board-row">
-    <div
-      *ngFor="let cell of row; let x = index"
-      class="board-cell"
-      [ngClass]="getCellClass(cell)"
-    ></div>
+    <div *ngFor="let cell of row; let x = index" class="board-cell">
+      <img
+        *ngIf="cell"
+        [src]="getTetrominoImageUrl(cell)"
+        width="100%"
+        height="100%"
+        [style.transform]="'rotate(' + cell.tetromino.rotation + 'deg)'"
+      />
+    </div>
   </div>
 </div>

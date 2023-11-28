@@ -1,107 +1,95 @@
 import { Component, OnInit } from '@angular/core';
 
 class Tetromino {
-  shape: number[][];
-  color: string;
+  shape: { coords: number[]; imageUrl: string }[];
+  rotation: number = 0;
 
-  constructor(shape: number[][], color: string) {
+  constructor(shape: { coords: number[]; imageUrl: string }[]) {
     this.shape = shape;
-    this.color = color;
+    this.rotation = 0;
   }
 }
 
 class TetrominoT extends Tetromino {
   constructor() {
-    super(
-      [
-        [1, 0],
-        [0, 1],
-        [1, 1],
-        [2, 1],
-      ],
-      'blue'
-    );
+    super([
+      { coords: [1, 0], imageUrl: '/assets/y.png' },
+      { coords: [0, 1], imageUrl: '/assets/x.png' },
+      { coords: [1, 1], imageUrl: '/assets/x.png' },
+      { coords: [2, 1], imageUrl: '/assets/y.png' },
+    ]);
   }
 }
 
 class TetrominoI extends Tetromino {
   constructor() {
-    super(
-      [
-        [0, 1],
-        [1, 1],
-        [2, 1],
-        [3, 1],
-      ],
-      'red'
-    );
+    super([
+      { coords: [0, 1], imageUrl: '../../assets/x.png' },
+      { coords: [1, 1], imageUrl: '../../assets/z.png' },
+      { coords: [2, 1], imageUrl: '../../assets/w.png' },
+      { coords: [3, 1], imageUrl: '../../assets/y.png' },
+    ]);
   }
 }
 
 class TetrominoJ extends Tetromino {
   constructor() {
-    super(
-      [
-        [0, 0],
-        [0, 1],
-        [1, 1],
-        [2, 1],
-      ],
-      'yellow'
-    );
+    super([
+      { coords: [0, 0], imageUrl: '../../assets/y.png' },
+      { coords: [0, 1], imageUrl: '../../assets/y.png' },
+      { coords: [1, 1], imageUrl: '../../assets/y.png' },
+      { coords: [2, 1], imageUrl: '../../assets/y.png' },
+    ]);
   }
 }
+
 class TetrominoL extends Tetromino {
   constructor() {
-    super(
-      [
-        [0, 1],
-        [1, 1],
-        [2, 1],
-        [2, 0],
-      ],
-      'green'
-    );
+    super([
+      { coords: [2, 0], imageUrl: '../../assets/y.png' },
+      { coords: [0, 1], imageUrl: '../../assets/y.png' },
+      { coords: [1, 1], imageUrl: '../../assets/x.png' },
+      { coords: [2, 1], imageUrl: '../../assets/x.png' },
+    ]);
   }
 }
+
 class TetrominoO extends Tetromino {
   constructor() {
-    super(
-      [
-        [0, 0],
-        [0, 1],
-        [1, 0],
-        [1, 1],
-      ],
-      'purple'
-    );
+    super([
+      { coords: [0, 0], imageUrl: '../../assets/y.png' },
+      { coords: [1, 0], imageUrl: '../../assets/y.png' },
+      { coords: [0, 1], imageUrl: '../../assets/y.png' },
+      { coords: [1, 1], imageUrl: '../../assets/y.png' },
+    ]);
   }
 }
+
 class TetrominoS extends Tetromino {
   constructor() {
-    super(
-      [
-        [0, 1],
-        [1, 1],
-        [1, 0],
-        [2, 0],
-      ],
-      'orange'
-    );
+    super([
+      { coords: [1, 0], imageUrl: '../../assets/z.png' },
+      { coords: [2, 0], imageUrl: '../../assets/w.png' },
+      { coords: [0, 1], imageUrl: '../../assets/z.png' },
+      { coords: [1, 1], imageUrl: '../../assets/w.png' },
+    ]);
   }
 }
+
 class TetrominoZ extends Tetromino {
   constructor() {
-    super(
-      [
-        [0, 0],
-        [1, 0],
-        [1, 1],
-        [2, 1],
-      ],
-      'black'
-    );
+    super([
+      { coords: [0, 0], imageUrl: '../../assets/z.png' },
+      { coords: [1, 0], imageUrl: '../../assets/w.png' },
+      { coords: [1, 1], imageUrl: '../../assets/z.png' },
+      { coords: [2, 1], imageUrl: '../../assets/w.png' },
+    ]);
   }
+}
+
+interface Cell {
+  tetromino: Tetromino;
+  imageUrl: string;
 }
 
 @Component({
@@ -113,7 +101,7 @@ class TetrominoZ extends Tetromino {
   },
 })
 export class TetrisComponent implements OnInit {
-  gameBoard: (Tetromino | null)[][] = Array(20)
+  gameBoard: (Cell | null)[][] = Array(20)
     .fill(null)
     .map(() => Array(10).fill(null));
 
@@ -131,7 +119,7 @@ export class TetrisComponent implements OnInit {
   ngOnInit(): void {
     setInterval(() => {
       this.moveTetrominoDown();
-    }, 1000);
+    }, 500);
   }
 
   initBoard() {
@@ -171,14 +159,20 @@ export class TetrisComponent implements OnInit {
   }
 
   placeTetromino(x: number, y: number, tetromino: Tetromino, value: boolean) {
-    tetromino.shape.forEach((point: number[]) => {
-      const [row, col] = point;
-      this.gameBoard[y + col][x + row] = value ? tetromino : null;
+    tetromino.shape.forEach((point) => {
+      const [row, col] = point.coords;
+      if (value) {
+        this.gameBoard[y + col][x + row] = {
+          tetromino: tetromino,
+          imageUrl: point.imageUrl,
+        };
+      } else {
+        this.gameBoard[y + col][x + row] = null;
+      }
     });
   }
 
   moveTetromino(direction: number) {
-    // Tetrominoyu kaldır
     this.placeTetromino(
       this.currentX,
       this.currentY,
@@ -245,36 +239,44 @@ export class TetrisComponent implements OnInit {
   }
 
   rotateTetromino() {
-    let newRotation = this.currentTetromino.shape.map((point: number[]) => {
-      const [x, y] = point;
-      const newX = 1 - (y - 1);
-      const newY = x - 1 + 1;
-      return [newX, newY];
-    });
+    let newRotation = this.currentTetromino.shape.map(
+      (point: { coords: number[]; imageUrl: string }) => {
+        const [x, y] = point.coords;
+        const newX = 1 - (y - 1);
+        const newY = x - 1 + 1;
+        return { coords: [newX, newY], imageUrl: point.imageUrl };
+      }
+    );
     if (this.currentTetromino instanceof TetrominoO) {
       return;
     }
     if (this.currentTetromino instanceof TetrominoI) {
-      newRotation = this.currentTetromino.shape.map((point: number[]) => {
-        const [x, y] = point;
-        const newX = 2 - (y - 1);
-        const newY = x - 1 + 1;
-        return [newX, newY];
-      });
+      newRotation = this.currentTetromino.shape.map(
+        (point: { coords: number[]; imageUrl: string }) => {
+          const [x, y] = point.coords;
+          const newX = 2 - (y - 1);
+          const newY = x - 1 + 1;
+          return { coords: [newX, newY], imageUrl: point.imageUrl };
+        }
+      );
     }
 
-    const collision = newRotation.some(([x, y]: number[]) => {
-      return (
-        x < 0 ||
-        x >= this.gameBoard[0].length ||
-        y < 0 ||
-        y >= this.gameBoard.length ||
-        (this.gameBoard[y + this.currentY] &&
-          this.gameBoard[y + this.currentY][x + this.currentX] !== null &&
-          this.gameBoard[y + this.currentY][x + this.currentX] !==
-            this.currentTetromino)
-      );
-    });
+    const collision = newRotation.some(
+      (point: { coords: number[]; imageUrl: string }) => {
+        const [relX, relY] = point.coords;
+        const newX = this.currentX + relX;
+        const newY = this.currentY + relY;
+
+        return (
+          newX < 0 ||
+          newX >= this.gameBoard[0].length ||
+          newY < 0 ||
+          newY >= this.gameBoard.length ||
+          (this.gameBoard[newY][newX] !== null &&
+            this.gameBoard[newY][newX]?.tetromino !== this.currentTetromino)
+        );
+      }
+    );
 
     if (!collision) {
       this.placeTetromino(
@@ -284,6 +286,9 @@ export class TetrisComponent implements OnInit {
         false
       );
       this.currentTetromino.shape = newRotation;
+      this.currentTetromino.rotation =
+        (this.currentTetromino.rotation + 90) % 360;
+
       this.placeTetromino(
         this.currentX,
         this.currentY,
@@ -292,7 +297,6 @@ export class TetrisComponent implements OnInit {
       );
     }
   }
-
   handleKeyboardEvent(event: KeyboardEvent) {
     if (event.key === 'ArrowUp') {
       this.rotateTetromino();
@@ -306,19 +310,15 @@ export class TetrisComponent implements OnInit {
   }
 
   checkCollision(x: number, y: number, tetromino: Tetromino): boolean {
-    for (let point of tetromino.shape) {
-      const newX = x + point[0];
-      const newY = y + point[1];
-      if (
+    return tetromino.shape.some((point) => {
+      const [newX, newY] = [x + point.coords[0], y + point.coords[1]];
+      return (
         newX < 0 ||
         newX >= this.gameBoard[0].length ||
         newY >= this.gameBoard.length ||
         this.gameBoard[newY][newX] !== null
-      ) {
-        return true;
-      }
-    }
-    return false;
+      );
+    });
   }
   checkCompleteLines(): number[] {
     return this.gameBoard
@@ -333,23 +333,7 @@ export class TetrisComponent implements OnInit {
     });
   }
 
-  getCellClass(cell: Tetromino | null): string {
-    if (cell instanceof TetrominoT) {
-      return 'tetromino-t';
-    } else if (cell instanceof TetrominoI) {
-      return 'tetromino-i';
-    } else if (cell instanceof TetrominoJ) {
-      return 'tetromino-j';
-    } else if (cell instanceof TetrominoL) {
-      return 'tetromino-l';
-    } else if (cell instanceof TetrominoO) {
-      return 'tetromino-o';
-    } else if (cell instanceof TetrominoS) {
-      return 'tetromino-s';
-    } else if (cell instanceof TetrominoZ) {
-      return 'tetromino-z';
-    } else {
-      return '';
-    }
+  getTetrominoImageUrl(cell: Cell | null): string {
+    return cell ? cell.imageUrl : '';
   }
 }
