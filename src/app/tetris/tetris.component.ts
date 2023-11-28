@@ -90,6 +90,7 @@ class TetrominoZ extends Tetromino {
 interface Cell {
   tetromino: Tetromino;
   imageUrl: string;
+  rotation: number;
 }
 
 @Component({
@@ -165,6 +166,7 @@ export class TetrisComponent implements OnInit {
         this.gameBoard[y + col][x + row] = {
           tetromino: tetromino,
           imageUrl: point.imageUrl,
+          rotation: tetromino.rotation,
         };
       } else {
         this.gameBoard[y + col][x + row] = null;
@@ -180,10 +182,8 @@ export class TetrisComponent implements OnInit {
       false
     );
 
-    // Yeni X pozisyonunu hesapla
     const newX = this.currentX + direction;
 
-    // Hem X hem de Y koordinatları için çarpışma kontrolü yap
     if (
       !this.checkCollision(newX, this.currentY, this.currentTetromino) &&
       !this.checkCollision(
@@ -192,11 +192,9 @@ export class TetrisComponent implements OnInit {
         this.currentTetromino
       )
     ) {
-      // Eğer çarpışma yoksa, X pozisyonunu güncelle
       this.currentX = newX;
     }
 
-    // Tetrominoyu yeni pozisyona yerleştir
     this.placeTetromino(
       this.currentX,
       this.currentY,
