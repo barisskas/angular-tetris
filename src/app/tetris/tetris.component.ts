@@ -13,10 +13,10 @@ class Tetromino {
 class TetrominoT extends Tetromino {
   constructor() {
     super([
-      { coords: [1, 0], imageUrl: '/assets/y.png' },
-      { coords: [0, 1], imageUrl: '/assets/x.png' },
-      { coords: [1, 1], imageUrl: '/assets/x.png' },
-      { coords: [2, 1], imageUrl: '/assets/y.png' },
+      { coords: [1, 0], imageUrl: '/assets/container-assets/t-1-4.png' },
+      { coords: [0, 1], imageUrl: '/assets/container-assets/t-1-1.png' },
+      { coords: [1, 1], imageUrl: '/assets/container-assets/t-1-2.png' },
+      { coords: [2, 1], imageUrl: '/assets/container-assets/t-1-3.png' },
     ]);
   }
 }
@@ -24,10 +24,10 @@ class TetrominoT extends Tetromino {
 class TetrominoI extends Tetromino {
   constructor() {
     super([
-      { coords: [0, 1], imageUrl: '../../assets/x.png' },
-      { coords: [1, 1], imageUrl: '../../assets/z.png' },
-      { coords: [2, 1], imageUrl: '../../assets/w.png' },
-      { coords: [3, 1], imageUrl: '../../assets/y.png' },
+      { coords: [0, 1], imageUrl: '../../assets/container-assets/i-1-1.png' },
+      { coords: [1, 1], imageUrl: '../../assets/container-assets/i-1-2.png' },
+      { coords: [2, 1], imageUrl: '../../assets/container-assets/i-1-3.png' },
+      { coords: [3, 1], imageUrl: '../../assets/container-assets/i-1-4.png' },
     ]);
   }
 }
@@ -35,10 +35,10 @@ class TetrominoI extends Tetromino {
 class TetrominoJ extends Tetromino {
   constructor() {
     super([
-      { coords: [0, 0], imageUrl: '../../assets/y.png' },
-      { coords: [0, 1], imageUrl: '../../assets/y.png' },
-      { coords: [1, 1], imageUrl: '../../assets/y.png' },
-      { coords: [2, 1], imageUrl: '../../assets/y.png' },
+      { coords: [0, 0], imageUrl: '../../assets/container-assets/j-1-4.png' },
+      { coords: [0, 1], imageUrl: '../../assets/container-assets/j-1-3.png' },
+      { coords: [1, 1], imageUrl: '../../assets/container-assets/j-1-2.png' },
+      { coords: [2, 1], imageUrl: '../../assets/container-assets/j-1-1.png' },
     ]);
   }
 }
@@ -46,10 +46,10 @@ class TetrominoJ extends Tetromino {
 class TetrominoL extends Tetromino {
   constructor() {
     super([
-      { coords: [2, 0], imageUrl: '../../assets/y.png' },
-      { coords: [0, 1], imageUrl: '../../assets/y.png' },
-      { coords: [1, 1], imageUrl: '../../assets/x.png' },
-      { coords: [2, 1], imageUrl: '../../assets/x.png' },
+      { coords: [2, 1], imageUrl: '../../assets/container-assets/l-1-1.png' },
+      { coords: [1, 1], imageUrl: '../../assets/container-assets/l-1-2.png' },
+      { coords: [0, 1], imageUrl: '../../assets/container-assets/l-1-3.png' },
+      { coords: [2, 0], imageUrl: '../../assets/container-assets/l-1-4.png' },
     ]);
   }
 }
@@ -57,10 +57,10 @@ class TetrominoL extends Tetromino {
 class TetrominoO extends Tetromino {
   constructor() {
     super([
-      { coords: [0, 0], imageUrl: '../../assets/y.png' },
-      { coords: [1, 0], imageUrl: '../../assets/y.png' },
-      { coords: [0, 1], imageUrl: '../../assets/y.png' },
-      { coords: [1, 1], imageUrl: '../../assets/y.png' },
+      { coords: [0, 0], imageUrl: '../../assets/container-assets/o-1-1.png' },
+      { coords: [1, 0], imageUrl: '../../assets/container-assets/o-1-2.png' },
+      { coords: [0, 1], imageUrl: '../../assets/container-assets/o-1-3.png' },
+      { coords: [1, 1], imageUrl: '../../assets/container-assets/o-1-4.png' },
     ]);
   }
 }
@@ -68,10 +68,10 @@ class TetrominoO extends Tetromino {
 class TetrominoS extends Tetromino {
   constructor() {
     super([
-      { coords: [1, 0], imageUrl: '../../assets/z.png' },
-      { coords: [2, 0], imageUrl: '../../assets/w.png' },
-      { coords: [0, 1], imageUrl: '../../assets/z.png' },
-      { coords: [1, 1], imageUrl: '../../assets/w.png' },
+      { coords: [1, 0], imageUrl: '../../assets/container-assets/s-1-3.png' },
+      { coords: [2, 0], imageUrl: '../../assets/container-assets/s-1-4.png' },
+      { coords: [0, 1], imageUrl: '../../assets/container-assets/s-1-1.png' },
+      { coords: [1, 1], imageUrl: '../../assets/container-assets/s-1-2.png' },
     ]);
   }
 }
@@ -79,10 +79,10 @@ class TetrominoS extends Tetromino {
 class TetrominoZ extends Tetromino {
   constructor() {
     super([
-      { coords: [0, 0], imageUrl: '../../assets/z.png' },
-      { coords: [1, 0], imageUrl: '../../assets/w.png' },
-      { coords: [1, 1], imageUrl: '../../assets/z.png' },
-      { coords: [2, 1], imageUrl: '../../assets/w.png' },
+      { coords: [0, 0], imageUrl: '../../assets/container-assets/z-1-1.png' },
+      { coords: [1, 0], imageUrl: '../../assets/container-assets/z-1-2.png' },
+      { coords: [1, 1], imageUrl: '../../assets/container-assets/z-1-3.png' },
+      { coords: [2, 1], imageUrl: '../../assets/container-assets/z-1-4.png' },
     ]);
   }
 }
